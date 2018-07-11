@@ -29,3 +29,15 @@ export function logOut(): Object {
         payload: {}
     };
 }
+
+/**
+ * Logout
+ * @param {Object} payload
+ * @returns {Object}
+ */
+export function register(payload : Object): Object {
+    return {
+        type: ActionTypes.USER_REGISTER_REQUEST,
+        payload
+    };
+}
