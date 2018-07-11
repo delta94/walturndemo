@@ -1,100 +1,135 @@
 import React, { PureComponent } from "react";
-// import PropTypes from "prop-types";
-// import { connect } from "react-redux";
-import {Link } from "react-router-dom"
-// import { ActionTypes } from "constants/index";
-// import { fetchPopularRepos } from "actions/index";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-// import Loader from "components/Loader";
+import { register } from "actions/index";
 
-export class Register extends PureComponent {
-    // static propTypes = {
-    //     dispatch: PropTypes.func.isRequired,
-    //     github: PropTypes.object.isRequired
-    // };
+class Register extends PureComponent {
+    constructor(props) {
+        super(props);
 
-    componentWillMount() {
-        // const { dispatch } = this.props;
+        this.state = {
+            user: {
+                firstName: "",
+                lastName: "",
+                username: "",
+                password: ""
+            },
+            submitted: false
+        };
 
-        // dispatch(fetchPopularRepos());
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    handleClickCancel = e => {
-        e.preventDefault();
-        // const { dispatch } = this.props;
-
-        // dispatch({ type: ActionTypes.CANCEL_FETCH });
+    static propTypes = {
+        register: PropTypes.func.isRequired,
     };
 
+
+    handleChange(event) {
+        const { name, value } = event.target;
+        const { user } = this.state;
+        this.setState({
+            user: {
+                ...user,
+                [name]: value
+            }
+        });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.setState({ submitted: true });
+        const { user } = this.state;
+        if (user.firstName && user.lastName && user.username && user.password) {
+            this.props.register(user);
+        }
+    }
+
     render() {
-        // const {
-        //     github: { popularRepos }
-        // } = this.props;
-        // const output = {
-        //     html: (
-        //         <div className="app__private__running">
-        //             <Loader />
-        //             <div className="app__cancel">
-        //                 <button
-        //                     className="btn btn-primary btn-sm btn-icon btn-icon--lg"
-        //                     onClick={this.handleClickCancel}
-        //                 >
-        //                     <i className="i-times-circle" />
-        //                     <span>Cancel</span>
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     )
-        // };
-
-        // if (popularRepos.status === "loaded") {
-        //     output.html = (
-        //         <div className="app__private__repos">
-        //             {popularRepos.data.map(d => (
-        //                 <div key={d.name}>
-        //                     <a href={d.html_url} target="_blank">{`${
-        //                         d.owner.login
-        //                     }/${d.name}`}</a>
-        //                     <div>{d.description}</div>
-        //                 </div>
-        //             ))}
-        //         </div>
-        //     );
-        // }
-        // const { loggingIn } = this.props;
-        const { username, password, submitted } = this.state;
-
+        const { user, submitted } = this.state;
         return (
-            <div key="Private" className="app__private app__route">
+            <div key="Private" className="app__auth app__route">
                 <div className="app__container">
-                    <div className="col-md-6 col-md-offset-3">
-                        <h2>Login</h2>
+                    <div className="auth__container">
+                        <h2>Register</h2>
                         <form name="form" onSubmit={this.handleSubmit}>
                             <div
                                 className={
                                     `form-group${
-                                        submitted && !username ? " has-error" : ""}`
+                                        submitted && !user.firstName
+                                            ? " has-error"
+                                            : ""}`
                                 }
                             >
-                                <label htmlFor="username">Username</label>
+                                <label htmlFor="firstName">First Name</label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    name="username"
-                                    value={username}
+                                    name="firstName"
+                                    value={user.firstName}
                                     onChange={this.handleChange}
                                 />
                                 {submitted &&
-                                    !username && (
+                                    !user.firstName && (
                                         <div className="help-block">
-                                            Username is required
+                                            First Name is required
                                         </div>
                                     )}
                             </div>
                             <div
                                 className={
                                     `form-group${
-                                        submitted && !password ? " has-error" : ""}`
+                                        submitted && !user.lastName
+                                            ? " has-error"
+                                            : ""}`
+                                }
+                            >
+                                <label htmlFor="lastName">Last Name</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="lastName"
+                                    value={user.lastName}
+                                    onChange={this.handleChange}
+                                />
+                                {submitted &&
+                                    !user.lastName && (
+                                        <div className="help-block">
+                                            Last Name is required
+                                        </div>
+                                    )}
+                            </div>
+                            <div
+                                className={
+                                    `form-group${
+                                        submitted && !user.username
+                                            ? " has-error"
+                                            : ""}`
+                                }
+                            >
+                                <label htmlFor="username">Email</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="username"
+                                    value={user.username}
+                                    onChange={this.handleChange}
+                                />
+                                {submitted &&
+                                    !user.username && (
+                                        <div className="help-block">
+                                            Email is required
+                                        </div>
+                                    )}
+                            </div>
+                            <div
+                                className={
+                                    `form-group${
+                                        submitted && !user.password
+                                            ? " has-error"
+                                            : ""}`
                                 }
                             >
                                 <label htmlFor="password">Password</label>
@@ -102,11 +137,11 @@ export class Register extends PureComponent {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    value={password}
+                                    value={user.password}
                                     onChange={this.handleChange}
                                 />
                                 {submitted &&
-                                    !password && (
+                                    !user.password && (
                                         <div className="help-block">
                                             Password is required
                                         </div>
@@ -114,13 +149,14 @@ export class Register extends PureComponent {
                             </div>
                             <div className="form-group">
                                 <button className="btn btn-primary">
-                                    Login
-                                </button>
-                                {
-                                    <img alt="img" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                                }
-                                <Link to="/register" className="btn btn-link">
                                     Register
+                                </button>
+                                <img
+                                    alt="img"
+                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                />
+                                <Link to="/login" className="btn btn-link">
+                                    Cancel
                                 </Link>
                             </div>
                         </form>
@@ -131,9 +167,17 @@ export class Register extends PureComponent {
     }
 }
 
-/* istanbul ignore next */
-// function mapStateToProps(state) {
-//     return { github: state.github };
-// }
+function mapStateToProps(state) {
+    return {
+        state
+    };
+}
 
-export default Register;
+const mapDispatchToProps = {
+    register
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Register);
