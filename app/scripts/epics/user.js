@@ -4,53 +4,54 @@
  */
 
 import { Observable } from "rxjs/Observable";
+import { fromPromise } from "rxjs/observable/fromPromise";
 
 import { ActionTypes } from "constants/index";
-import { register } from "../utils/auth";
-import { actionDispatch } from "../utils/return-obj";
+import { register, login } from "../utils/auth";
+import { showAlert } from "../actions";
 
 export function userLogin(action$) {
     return action$
         .ofType(ActionTypes.USER_LOGIN_REQUEST)
         .debounceTime(2000)
-        .mergeMap(() =>
-            Observable.of(
-                actionDispatch(
-                    ActionTypes.USER_REGISTER_SUCCESS,
-                    register(action$.email, action$.pass)
-                )
-            )
-        )
-        .catch(
-            /* istanbul ignore next  */ error =>
-                Observable.of({
-                    type: ActionTypes.USER_LOGIN_FAILURE,
+        .switchMap(({ payload }) => fromPromise(login(payload))
+            .map(data => ({
+                type: ActionTypes.USER_REGISTER_SUCCESS,
+                payload: data
+            }))
+            .catch(error => Observable.of(
+                {
+                    type: ActionTypes.USER_REGISTER_FAILURE,
                     payload: { error },
                     error: true
+                },
+                showAlert(error.code, {
+                    type: "error",
+                    icon: "i-flash"
                 })
-        );
+            )))
 }
 
 export function userRegister(action$) {
     return action$
         .ofType(ActionTypes.USER_REGISTER_REQUEST)
         .debounceTime(2000)
-        .mergeMap(() =>
-            Observable.of(
-                actionDispatch(
-                    ActionTypes.USER_REGISTER_SUCCESS,
-                    register(action$.email, action$.pass)
-                )
-            )
-        )
-        .catch(
-            /* istanbul ignore next  */ error =>
-                Observable.of({
+        .switchMap(({ payload }) => fromPromise(register(payload))
+            .map(data => ({
+                type: ActionTypes.USER_REGISTER_SUCCESS,
+                payload: data
+            }))
+            .catch(error => Observable.of(
+                {
                     type: ActionTypes.USER_REGISTER_FAILURE,
                     payload: { error },
                     error: true
+                },
+                showAlert(error.code, {
+                    type: "error",
+                    icon: "i-flash"
                 })
-        );
+            )));
 }
 
 export function userLogout(action$) {

@@ -8,13 +8,13 @@ import { ActionTypes } from "constants/index";
 
 /**
  * Login
- *
+ * @param {Object} payload
  * @returns {Object}
  */
-export function login(): Object {
+export function login(payload : Object): Object {
     return {
         type: ActionTypes.USER_LOGIN_REQUEST,
-        payload: {}
+        payload
     };
 }
 
