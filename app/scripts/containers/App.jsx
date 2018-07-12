@@ -16,6 +16,7 @@ import Home from "routes/Home";
 import Private from "routes/Private";
 import Login from "routes/Login";
 import Register from "routes/Register";
+import PlaylistComponent from "routes/Playlist";
 import NotFound from "routes/NotFound";
 
 import Header from "components/Header";
@@ -26,6 +27,7 @@ export class App extends React.Component {
     static propTypes = {
         app: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired,
+        playListCount: PropTypes.number.isRequired,
         user: PropTypes.object.isRequired
     };
 
@@ -40,7 +42,7 @@ export class App extends React.Component {
     }
 
     render() {
-        const { app, dispatch, user } = this.props;
+        const { app, dispatch, user, playListCount } = this.props;
 
         return (
             <ConnectedRouter history={history}>
@@ -57,7 +59,7 @@ export class App extends React.Component {
                         titleTemplate={`%s | ${config.name}`}
                         titleAttributes={{ itemprop: "name", lang: "pt-br" }}
                     />
-                    <Header dispatch={dispatch} user={user} />
+                    <Header dispatch={dispatch} user={user} playListCount={playListCount} />
                     <main className="app__main">
                         <Switch>
                             <Route exact path="/" component={Home} />
@@ -79,6 +81,12 @@ export class App extends React.Component {
                                 path="/private"
                                 exact
                             />
+                            <RoutePrivate
+                                component={PlaylistComponent}
+                                isAuthenticated={user.isAuthenticated}
+                                path="/playlist"
+                                exact
+                            />
                             <Route component={NotFound} />
                         </Switch>
                     </main>
@@ -94,7 +102,8 @@ export class App extends React.Component {
 function mapStateToProps(state) {
     return {
         app: state.app,
-        user: state.user
+        user: state.user,
+        playListCount : state.netflix.playListCount
     };
 }
 
