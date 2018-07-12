@@ -7,31 +7,28 @@ import { Observable } from "rxjs/Observable";
 
 import { ActionTypes } from "constants/index";
 
-export function addToPlayList(action$) {
+export function addToPlayList(action$, state) {
     return action$
         .ofType(ActionTypes.ADD_TO_PLAYLIST_REQUEST)
-        .switchMap(() =>
-            Observable.ajax
-                .getJSON(
-                    "https://api.github.com/search/repositories?q=+language:javascript+created:%3E2016-10-01&sort=stars&order=desc"
-                )
-                .map(data => ({
-                    type: ActionTypes.FETCH_POPULAR_REPOS_SUCCESS,
-                    payload: { data: data.items }
-                }))
-                .takeUntil(action$.ofType(ActionTypes.CANCEL_FETCH))
-                .defaultIfEmpty({
-                    type: ActionTypes.FETCH_POPULAR_REPOS_CANCEL
-                })
-                .catch(error => [
-                    {
-                        type: ActionTypes.FETCH_POPULAR_REPOS_FAILURE,
-                        payload: {
-                            message: error.message,
-                            status: error.status
-                        },
-                        error: true
-                    }
-                ])
-        );
+        .switchMap((data) =>{
+            const arr = state.getState().netflix.playlist;
+
+            if(arr.filter(vendor => vendor.name === data.payload.name).length === 0)
+                arr.push(data.payload);
+
+            return Observable.of({
+                type: ActionTypes.ADD_TO_PLAYLIST_SUCCESS,
+                payload : {arr, length : arr.length}
+            })
+        }
+        ).catch(error => [
+            {
+                type: ActionTypes.ADD_TO_PLAYLIST_FAILURE,
+                payload: {
+                    message: error.message,
+                    status: error.status
+                },
+                error: true
+            }
+        ]);
 }
