@@ -1,11 +1,10 @@
 import React, { PureComponent } from "react";
-// import PropTypes from "prop-types";
-// import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-// import { ActionTypes } from "constants/index";
-// import { fetchPopularRepos } from "actions/index";
+import { login } from "actions/index";
 
-export class Login extends PureComponent {
+class Login extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -22,6 +21,11 @@ export class Login extends PureComponent {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    static propTypes = {
+        isLoading: PropTypes.bool.isRequired,
+        login: PropTypes.func.isRequired
+    };
+
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -34,13 +38,13 @@ export class Login extends PureComponent {
         const { username, password } = this.state;
         // const { dispatch } = this.props;
         if (username && password) {
-            // dispatch(userActions.login(username, password));
+            this.props.login({ username, password });
         }
     }
 
     render() {
         const { username, password, submitted } = this.state;
-
+        const { isLoading } = this.props;
         return (
             <div key="Private" className="app__auth app__route">
                 <div className="app__container">
@@ -91,12 +95,12 @@ export class Login extends PureComponent {
                                 <button className="btn btn-primary">
                                     Login
                                 </button>
-                                {
+                                {isLoading && (
                                     <img
                                         alt="img"
                                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
                                     />
-                                }
+                                )}
                                 <Link to="/register" className="btn btn-link">
                                     Register
                                 </Link>
@@ -109,4 +113,20 @@ export class Login extends PureComponent {
     }
 }
 
-export default Login;
+function mapStateToProps(state) {
+    const {
+        user: { isLoading }
+    } = state;
+    return {
+        isLoading
+    };
+}
+
+const mapDispatchToProps = {
+    login
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login);

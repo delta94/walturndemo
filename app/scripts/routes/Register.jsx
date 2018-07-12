@@ -23,9 +23,9 @@ class Register extends PureComponent {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     static propTypes = {
-        register: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+        register: PropTypes.func.isRequired
     };
-
 
     handleChange(event) {
         const { name, value } = event.target;
@@ -49,6 +49,7 @@ class Register extends PureComponent {
 
     render() {
         const { user, submitted } = this.state;
+        const { isLoading } = this.props;
         return (
             <div key="Private" className="app__auth app__route">
                 <div className="app__container">
@@ -56,12 +57,11 @@ class Register extends PureComponent {
                         <h2>Register</h2>
                         <form name="form" onSubmit={this.handleSubmit}>
                             <div
-                                className={
-                                    `form-group${
-                                        submitted && !user.firstName
-                                            ? " has-error"
-                                            : ""}`
-                                }
+                                className={`form-group${
+                                    submitted && !user.firstName
+                                        ? " has-error"
+                                        : ""
+                                }`}
                             >
                                 <label htmlFor="firstName">First Name</label>
                                 <input
@@ -79,12 +79,11 @@ class Register extends PureComponent {
                                     )}
                             </div>
                             <div
-                                className={
-                                    `form-group${
-                                        submitted && !user.lastName
-                                            ? " has-error"
-                                            : ""}`
-                                }
+                                className={`form-group${
+                                    submitted && !user.lastName
+                                        ? " has-error"
+                                        : ""
+                                }`}
                             >
                                 <label htmlFor="lastName">Last Name</label>
                                 <input
@@ -102,12 +101,11 @@ class Register extends PureComponent {
                                     )}
                             </div>
                             <div
-                                className={
-                                    `form-group${
-                                        submitted && !user.username
-                                            ? " has-error"
-                                            : ""}`
-                                }
+                                className={`form-group${
+                                    submitted && !user.username
+                                        ? " has-error"
+                                        : ""
+                                }`}
                             >
                                 <label htmlFor="username">Email</label>
                                 <input
@@ -125,12 +123,11 @@ class Register extends PureComponent {
                                     )}
                             </div>
                             <div
-                                className={
-                                    `form-group${
-                                        submitted && !user.password
-                                            ? " has-error"
-                                            : ""}`
-                                }
+                                className={`form-group${
+                                    submitted && !user.password
+                                        ? " has-error"
+                                        : ""
+                                }`}
                             >
                                 <label htmlFor="password">Password</label>
                                 <input
@@ -151,10 +148,13 @@ class Register extends PureComponent {
                                 <button className="btn btn-primary">
                                     Register
                                 </button>
-                                <img
-                                    alt="img"
-                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
-                                />
+                                {(isLoading) && (
+                                    <img
+                                        alt="img"
+                                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                    />
+                                )}
+
                                 <Link to="/login" className="btn btn-link">
                                     Cancel
                                 </Link>
@@ -168,9 +168,12 @@ class Register extends PureComponent {
 }
 
 function mapStateToProps(state) {
+    const {
+        user: { isLoading }
+    } = state;
     return {
-        state
-    };
+        isLoading
+    }
 }
 
 const mapDispatchToProps = {
