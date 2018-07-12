@@ -87,12 +87,14 @@
             margin-left: $grid-gutter-width / 6;
         }
     }
+
     .app__header__logout {
-        background-color : white;
+        background-color: #fff;
     }
+
     .app__header__playlist {
-        font-size : 1.6rem;
-        color : white;
-        padding : 1rem;
+        color: #fff;
+        font-size: 1.6rem;
+        padding: 1rem;
     }
 }
