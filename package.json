@@ -133,7 +133,7 @@
     "start": "node tools/start.js",
     "build": "NODE_ENV=production webpack --config config/webpack.config.prod.js",
     "analyze": "NNODE_ENV=production webpack --config config/webpack.prod.js --profile --json > webpack.stats.json",
-    "lint": "eslint  --ext .js --ext .jsx app/scripts config test",
+    "lint": "eslint  --ext .js --ext .jsx app/scripts config test --fix",
     "lint:styles": "stylelint app/styles/**/*.scss",
     "test": "jest --updateSnapshot --config config/jest.config.js --bail --coverage=50",
     "test:watch": "jest --config config/jest.config.js --watch",
