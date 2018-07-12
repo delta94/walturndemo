@@ -36,8 +36,6 @@ export function hideAlert(id: string): Object {
  * @returns {Object}
  */
 export function showAlert(message: string, options: Object): Object {
-    const timeout = options.type === "error" ? 0 : 5;
-
     return {
         type: ActionTypes.SHOW_ALERT,
         payload: {
@@ -46,7 +44,7 @@ export function showAlert(message: string, options: Object): Object {
             message,
             position: options.position || "bottom-right",
             type: options.type,
-            timeout: !isNaN(options.timeout) ? options.timeout : timeout
+            timeout: 5
         }
     };
 }
