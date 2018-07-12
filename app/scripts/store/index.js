@@ -14,7 +14,7 @@ const reducer = persistReducer(
     {
         key: "rrob", // key is required
         storage, // storage is now required
-        whitelist: ["app", "user"]
+        whitelist: ["app", "user","netflix"]
     },
     combineReducers({
         ...rootReducer,
