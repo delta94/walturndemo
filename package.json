@@ -1,7 +1,7 @@
 {
   "name": "walturndemo",
   "title": "Walturn Demo",
-  "description": "Demo task",
+  "description": "Netflix skelaton",
   "version": "0.0.1",
   "author": "Zain Mustafa <zaindsu@gmail.com>",
   "repository": {
@@ -131,7 +131,7 @@
   },
   "scripts": {
     "start": "node tools/start.js",
-    "build": "NODE_ENV=production webpack --config config/webpack.config.prod.js",
+    "build": "NODE_ENV=production webpack --config config/webpack.config.prod.js && firebase deploy",
     "analyze": "NNODE_ENV=production webpack --config config/webpack.prod.js --profile --json > webpack.stats.json",
     "lint": "eslint  --ext .js --ext .jsx app/scripts config test --fix",
     "lint:styles": "stylelint app/styles/**/*.scss",

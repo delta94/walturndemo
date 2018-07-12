@@ -2,19 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 
-import { login, logOut } from "actions";
+import { logOut } from "actions";
 import { NavLink } from "react-router-dom";
 
 export default class Header extends React.Component {
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
+        playListCount: PropTypes.number.isRequired,
         user: PropTypes.object.isRequired
-    };
-
-    handleClickLogin = () => {
-        const { dispatch } = this.props;
-
-        dispatch(login());
     };
 
     handleClickLogout = () => {
@@ -24,21 +19,25 @@ export default class Header extends React.Component {
     };
 
     render() {
-        const { user } = this.props;
+        const { user, playListCount } = this.props;
 
         const loginBtn = (
-            <button
-                className="app__header__login btn btn-sm btn-primary btn-icon"
-                onClick={this.handleClickLogin}
+            <NavLink
+                to="/login"
+                className="app__header__link"
+                activeClassName="is-active"
+                exact
             >
-                <i
-                    className={cx({
-                        "i-circle-o-notch i-spin": user.isRunning,
-                        "i-sign-in": !user.isRunning
-                    })}
-                />
-                <span>Login</span>
-            </button>
+                <div className="app__header__login btn btn-sm btn-primary btn-icon">
+                    <i
+                        className={cx({
+                            "i-circle-o-notch i-spin": user.isRunning,
+                            "i-sign-in": !user.isRunning
+                        })}
+                    />
+                    <span>Login</span>
+                </div>
+            </NavLink>
         );
 
         const logoutBtn = (
@@ -62,7 +61,11 @@ export default class Header extends React.Component {
                                 activeClassName="is-active"
                                 exact
                             >
-                                Home
+                                <span
+                                    style={{ color: "red", fontWeight: "bold" }}
+                                >
+                                    NETFLIX
+                                </span>
                             </NavLink>
                         </li>
                         <li>
@@ -71,10 +74,25 @@ export default class Header extends React.Component {
                                 className="app__header__link"
                                 activeClassName="is-active"
                             >
-                                Private
+                                Home
                             </NavLink>
                         </li>
-                        <li>{user.isAuthenticated ? logoutBtn : loginBtn}</li>
+                        <li>
+                            {user.isAuthenticated ? (
+                                <NavLink
+                                    to="/playlist"
+                                    className="app__header__logout btn btn-sm btn-outline-primary btn-icon"
+                                    activeClassName="is-active"
+                                    exact
+                                >
+                                    <i className="i-playlist" />
+                                    <span>PLAYLIST: {playListCount}</span>
+                                </NavLink>
+                            ) : (
+                                <span />
+                            )}
+                            {user.isAuthenticated ? logoutBtn : loginBtn}
+                        </li>
                     </ul>
                 </div>
             </header>
